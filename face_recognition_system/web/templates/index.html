@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DGFC Face Recognition System</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边导航 -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="5"/>
+                        <path d="M20 21a8 8 0 10-16 0"/>
+                    </svg>
+                </div>
+                <span class="logo-text">DGFC</span>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>仪表盘</span>
+                </li>
+                <li class="nav-item" data-page="recognition">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    <span>人脸识别</span>
+                </li>
+                <li class="nav-item" data-page="realtime">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="23 7 16 12 23 17 23 7"/>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                    </svg>
+                    <span>实时监控</span>
+                </li>
+                <li class="nav-item" data-page="cluster">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <circle cx="19" cy="5" r="2"/>
+                        <circle cx="5" cy="5" r="2"/>
+                        <circle cx="19" cy="19" r="2"/>
+                        <circle cx="5" cy="19" r="2"/>
+                        <line x1="12" y1="9" x2="12" y2="3"/>
+                        <line x1="14.5" y1="13.5" x2="17" y2="17"/>
+                        <line x1="9.5" y1="13.5" x2="7" y2="17"/>
+                    </svg>
+                    <span>智能聚类</span>
+                </li>
+                <li class="nav-item" data-page="persons">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 010 7.75"/>
+                    </svg>
+                    <span>人员管理</span>
+                </li>
+                <li class="nav-item" data-page="compare">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="8" height="8" rx="1"/>
+                        <rect x="14" y="2" width="8" height="8" rx="1"/>
+                        <path d="M12 14v6"/>
+                        <path d="M9 17l3 3 3-3"/>
+                    </svg>
+                    <span>人脸比对</span>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <div class="status-indicator online">
+                    <span class="dot"></span>
+                    <span>系统在线</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 仪表盘页面 -->
+            <section id="dashboard" class="page active">
+                <header class="page-header">
+                    <h1>系统概览</h1>
+                    <p class="subtitle">DGFC人脸识别系统 - 基于密度聚类的智能识别</p>
+                </header>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon persons">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-persons">0</span>
+                            <span class="stat-label">注册人员</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon faces">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="8" r="5"/>
+                                <path d="M20 21a8 8 0 10-16 0"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-faces">0</span>
+                            <span class="stat-label">人脸样本</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon index">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-index">0</span>
+                            <span class="stat-label">索引大小</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon unassigned">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-unassigned">0</span>
+                            <span class="stat-label">待标注</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-cards">
+                    <div class="feature-card" onclick="showPage('recognition')">
+                        <div class="feature-icon">📷</div>
+                        <h3>人脸识别</h3>
+                        <p>上传图片进行人脸检测和识别</p>
+                    </div>
+                    <div class="feature-card" onclick="showPage('realtime')">
+                        <div class="feature-icon">🎥</div>
+                        <h3>实时监控</h3>
+                        <p>摄像头实时人脸识别</p>
+                    </div>
+                    <div class="feature-card" onclick="showPage('cluster')">
+                        <div class="feature-icon">🔗</div>
+                        <h3>智能聚类</h3>
+                        <p>使用DGFC算法自动聚类</p>
+                    </div>
+                    <div class="feature-card" onclick="showPage('persons')">
+                        <div class="feature-icon">👥</div>
+                        <h3>人员管理</h3>
+                        <p>管理注册人员信息</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 人脸识别页面 -->
+            <section id="recognition" class="page">
+                <header class="page-header">
+                    <h1>人脸识别</h1>
+                    <p class="subtitle">上传图片进行人脸检测和身份识别</p>
+                </header>
+                
+                <div class="recognition-container">
+                    <div class="upload-area" id="upload-area">
+                        <input type="file" id="image-input" accept="image/*" hidden>
+                        <div class="upload-content">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <p>点击或拖拽上传图片</p>
+                            <span class="hint">支持 JPG, PNG, GIF 格式</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-panel" id="result-panel" style="display: none;">
+                        <div class="result-image-container">
+                            <img id="result-image" alt="识别结果">
+                        </div>
+                        <div class="result-details">
+                            <h3>识别结果</h3>
+                            <div id="face-results" class="face-results"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 实时监控页面 -->
+            <section id="realtime" class="page">
+                <header class="page-header">
+                    <h1>实时监控</h1>
+                    <p class="subtitle">摄像头实时人脸检测与识别</p>
+                </header>
+                
+                <div class="realtime-container">
+                    <div class="video-wrapper">
+                        <video id="video-stream" autoplay playsinline></video>
+                        <canvas id="video-canvas" style="display: none;"></canvas>
+                        <div class="video-overlay" id="video-overlay">
+                            <button class="btn-start-camera" id="btn-start-camera">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="23 7 16 12 23 17 23 7"/>
+                                    <rect x="1" y="5" width="15" height="14" rx="2"/>
+                                </svg>
+                                启动摄像头
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="realtime-controls">
+                        <button class="btn-control" id="btn-capture">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            截图识别
+                        </button>
+                        <button class="btn-control" id="btn-toggle-realtime">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                            开始实时识别
+                        </button>
+                    </div>
+                    
+                    <div class="realtime-results" id="realtime-results"></div>
+                </div>
+            </section>
+
+            <!-- 智能聚类页面 -->
+            <section id="cluster" class="page">
+                <header class="page-header">
+                    <h1>智能聚类</h1>
+                    <p class="subtitle">使用DGFC算法对大量人脸进行自动聚类分组</p>
+                </header>
+                
+                <div class="cluster-container">
+                    <div class="cluster-upload">
+                        <div class="upload-zone" id="cluster-upload-zone">
+                            <input type="file" id="cluster-images-input" accept="image/*" multiple hidden>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 14.899A7 7 0 1115.71 8h1.79a4.5 4.5 0 012.5 8.242"/>
+                                <path d="M12 12v9"/>
+                                <path d="M8 17l4 4 4-4"/>
+                            </svg>
+                            <p>上传多张图片进行聚类分析</p>
+                            <span class="hint">可一次性上传多张照片</span>
+                        </div>
+                        
+                        <div class="selected-images" id="selected-images"></div>
+                        
+                        <div class="cluster-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="auto-register">
+                                <span>自动注册为新人员</span>
+                            </label>
+                            <button class="btn-primary" id="btn-start-cluster" disabled>
+                                开始聚类
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="cluster-results" id="cluster-results" style="display: none;">
+                        <h3>聚类结果</h3>
+                        <div class="cluster-stats">
+                            <span>发现 <strong id="cluster-count">0</strong> 个身份</span>
+                            <span>共 <strong id="face-count">0</strong> 张人脸</span>
+                        </div>
+                        <div class="clusters-grid" id="clusters-grid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 人员管理页面 -->
+            <section id="persons" class="page">
+                <header class="page-header">
+                    <h1>人员管理</h1>
+                    <p class="subtitle">管理系统中注册的人员信息</p>
+                </header>
+                
+                <div class="persons-toolbar">
+                    <button class="btn-primary" id="btn-add-person">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        添加人员
+                    </button>
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" placeholder="搜索人员..." id="search-persons">
+                    </div>
+                </div>
+                
+                <div class="persons-grid" id="persons-grid">
+                    <!-- 动态生成 -->
+                </div>
+            </section>
+
+            <!-- 人脸比对页面 -->
+            <section id="compare" class="page">
+                <header class="page-header">
+                    <h1>人脸比对</h1>
+                    <p class="subtitle">比较两张图片中的人脸是否属于同一人</p>
+                </header>
+                
+                <div class="compare-container">
+                    <div class="compare-images">
+                        <div class="compare-image-box" id="compare-box-1">
+                            <input type="file" id="compare-input-1" accept="image/*" hidden>
+                            <div class="compare-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <span>上传第一张图片</span>
+                            </div>
+                            <img id="compare-img-1" style="display: none;">
+                        </div>
+                        
+                        <div class="compare-vs">VS</div>
+                        
+                        <div class="compare-image-box" id="compare-box-2">
+                            <input type="file" id="compare-input-2" accept="image/*" hidden>
+                            <div class="compare-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <span>上传第二张图片</span>
+                            </div>
+                            <img id="compare-img-2" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary btn-compare" id="btn-compare" disabled>
+                        开始比对
+                    </button>
+                    
+                    <div class="compare-result" id="compare-result" style="display: none;">
+                        <div class="result-indicator" id="result-indicator">
+                            <div class="similarity-circle">
+                                <svg viewBox="0 0 36 36">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    <path class="circle-progress" id="similarity-progress" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                </svg>
+                                <span class="similarity-value" id="similarity-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="result-text" id="result-text"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 模态框: 添加人员 -->
+    <div class="modal" id="modal-add-person">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>添加新人员</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text" id="person-name" placeholder="请输入姓名">
+                </div>
+                <div class="form-group">
+                    <label>人脸照片</label>
+                    <div class="person-photos-upload" id="person-photos-upload">
+                        <input type="file" id="person-photos-input" accept="image/*" multiple hidden>
+                        <div class="upload-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            添加照片
+                        </div>
+                    </div>
+                    <div class="person-photos-preview" id="person-photos-preview"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-cancel">取消</button>
+                <button class="btn-primary" id="btn-save-person">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载指示器 -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <span>处理中...</span>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+

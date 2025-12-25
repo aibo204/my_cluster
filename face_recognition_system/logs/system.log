@@ -1,0 +1,10 @@
+2025-12-25 15:50:07,700 - __main__ - INFO - ==================================================
+2025-12-25 15:50:07,701 - __main__ - INFO - DGFC人脸识别系统演示
+2025-12-25 15:50:07,701 - __main__ - INFO - ==================================================
+2025-12-25 15:50:07,701 - __main__ - INFO - 
+[1] 初始化识别引擎...
+2025-12-25 15:50:07,708 - core.feature_extractor - WARNING - PyTorch not available, feature extraction will be limited
+2025-12-25 15:50:07,708 - __main__ - ERROR - ✗ 引擎初始化失败: name 'torch' is not defined
+2025-12-25 15:50:52,246 - core.feature_extractor - WARNING - PyTorch not available, feature extraction will be limited
+2025-12-25 15:51:32,081 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-12-25 16:00:32,113 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.

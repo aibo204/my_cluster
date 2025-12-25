@@ -1,0 +1,47 @@
+# 人脸识别系统依赖
+# Core dependencies
+numpy>=1.21.0
+scipy>=1.7.0
+scikit-learn>=1.0.0
+pandas>=1.3.0
+
+# Deep Learning
+torch>=1.9.0
+torchvision>=0.10.0
+onnxruntime>=1.10.0
+
+# Face Detection & Recognition
+facenet-pytorch>=2.5.2
+opencv-python>=4.5.0
+Pillow>=8.0.0
+dlib>=19.22.0
+
+# Web Framework
+flask>=2.0.0
+flask-cors>=3.0.0
+flask-socketio>=5.1.0
+python-socketio>=5.4.0
+eventlet>=0.33.0
+
+# Database
+sqlalchemy>=1.4.0
+faiss-cpu>=1.7.0  # 向量索引
+
+# Utilities
+tqdm>=4.62.0
+python-multipart>=0.0.5
+requests>=2.26.0
+
+# Visualization
+matplotlib>=3.4.0
+plotly>=5.3.0
+
+# Image processing
+imageio>=2.9.0
+albumentations>=1.1.0
+
+# Logging & Config
+python-dotenv>=0.19.0
+pyyaml>=5.4.0
+loguru>=0.5.0
+
